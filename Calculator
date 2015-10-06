@@ -1,0 +1,503 @@
+/**
+U10216010 ZHIWEN_ZHAN
+Calculator design
+include "+" "-" "*" "/" sin cos tan square root clear decimal function
+
+*/
+import java.awt.*; 
+import java.awt.event.*;
+import javax.swing.*;
+import java.text.DecimalFormat;
+
+
+public class Calculator extends JFrame {
+	
+	
+	public static void main(String[] args){		
+		Calculator  pw = new Calculator ();
+		pw.pack();		
+		pw.setSize(400, 500);
+		pw.setTitle("Calculator");
+		pw.setLocationRelativeTo(null);
+		pw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		pw.setVisible(true);
+		
+	}
+	
+	//button and the textfield to print the result
+	
+	private JTextField jlresult = new JTextField("0",20);
+	private JButton jbtone = new JButton("1");
+	private JButton jbttwo = new JButton("2");
+	private JButton jbtthree = new JButton("3");
+	private JButton jbtfour = new JButton("4");
+	private JButton jbtfive = new JButton("5");
+	private JButton jbtsix = new JButton("6");
+	private JButton jbtseven = new JButton("7");
+	private JButton jbteight = new JButton("8");
+	private JButton jbtnine = new JButton("9");
+	private JButton jbtzero = new JButton("0");
+	private JButton jbtplus = new JButton("+");
+	private JButton jbttime = new JButton("X");
+	private JButton jbtminus = new JButton("-");
+	private JButton jbtdivide = new JButton("/");
+	private JButton jbtroot = new JButton("root");
+	private JButton jbtsquare = new JButton("square");
+	private JButton jbtsin = new JButton("sin");
+	private JButton jbtcos = new JButton("cos");
+	private JButton jbttan = new JButton("tan");
+	private JButton jbtdelete = new JButton("C");
+	private JButton jbtcalculate = new JButton("=");
+	private JButton jbtdecimal = new JButton(".");
+
+
+	public Calculator(){
+		
+		//add button and Typeset
+		JPanel p1 = new JPanel(new GridLayout(4,5));
+		p1.add(jbtplus);
+		p1.add(jbtone);
+		p1.add(jbttwo);
+		p1.add(jbtthree);
+		p1.add(jbtsin);
+		p1.add(jbtminus);
+		p1.add(jbtfour);
+		p1.add(jbtfive);
+		p1.add(jbtsix);
+		p1.add(jbtcos);
+		p1.add(jbttime);
+		p1.add(jbtseven);
+		p1.add(jbteight);
+		p1.add(jbtnine);
+		p1.add(jbttan);
+		p1.add(jbtdivide);
+		p1.add(jbtdecimal);
+		p1.add(jbtzero);
+		p1.add(jbtroot);
+		p1.add(jbtsquare);
+	
+
+		JPanel p2 = new JPanel(new GridLayout(1,2));
+
+		p2.add(jbtdelete);
+		p2.add(jbtcalculate);
+		
+		JPanel p3 = new JPanel();
+		jlresult.setFont(new Font("", Font.PLAIN, 20));
+		jlresult.setHorizontalAlignment(SwingConstants.RIGHT);
+		jlresult.setEditable(false);
+		p3.add(jlresult);
+	
+	
+		getContentPane().add(p1, BorderLayout.CENTER);
+		getContentPane().add(p2, BorderLayout.SOUTH);
+		getContentPane().add(p3, BorderLayout.NORTH);
+
+	
+		//add event listener to make it action
+		ButtonListener listener = new ButtonListener();
+		jbtplus.addActionListener(listener);
+		jbtone.addActionListener(listener);
+		jbttwo.addActionListener(listener);
+		jbtthree.addActionListener(listener);
+		jbtsin.addActionListener(listener);
+		jbtminus.addActionListener(listener);
+		jbtfour.addActionListener(listener);
+		jbtfive.addActionListener(listener);
+		jbtsix.addActionListener(listener);
+		jbtcos.addActionListener(listener);
+		jbttime.addActionListener(listener);
+		jbtseven.addActionListener(listener);
+		jbteight.addActionListener(listener);
+		jbtnine.addActionListener(listener);
+		jbttan.addActionListener(listener);
+		jbtdivide.addActionListener(listener);
+		jbtdecimal.addActionListener(listener);
+		jbtzero.addActionListener(listener);
+		jbtroot.addActionListener(listener);
+		jbtsquare.addActionListener(listener);
+		jbtdelete.addActionListener(listener);
+		jbtcalculate.addActionListener(listener);
+	
+	}
+
+	private class ButtonListener implements ActionListener{
+		int staticplus = 0;
+		double number = 0;
+		double number_first = 0;
+		double result = 0;
+		double number_second = 0;
+		boolean decimal_add = false;
+		
+		//Calculate with 4 static +-*/
+		double calculate(double number_1,double number_2, int static_plus){
+			
+			double result_c = 0;
+			
+			switch(static_plus){
+				case 0:result_c = number_2;break;
+				case 1:result_c = number_1 + number_2;break;
+				case 2:result_c = number_1 - number_2;break;
+				case 3:result_c = number_1 * number_2;break;
+				case 4:result_c = number_1 / number_2;	
+			}
+			
+			return result_c;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent ev){
+				
+			//Press button 1 
+			if(ev.getSource() == jbtone){
+				
+				//Determine the number is decimal and 0
+				if (Double.parseDouble(jlresult.getText()) == 0 && decimal_add == false){
+					//Replace the number 0 with 1
+					jlresult.setText("1");
+					//Set the number and print on the textfield
+					number = Double.parseDouble(jlresult.getText());	
+				}
+				else{
+					//Add 1 after the origin number on the textfield
+					jlresult.setText(jlresult.getText() + "1");
+					//Set the number and print on the textfield
+					number = Double.parseDouble(jlresult.getText());	
+				}	
+			}
+			//2~9 button as so on
+			
+			//Press button 2
+			else if(ev.getSource() == jbttwo){
+				
+				//Determine the number is decimal and 0
+				if (Double.parseDouble(jlresult.getText()) == 0 && decimal_add == false){
+					jlresult.setText("2");
+					number = Double.parseDouble(jlresult.getText());	
+				}
+				else{
+					jlresult.setText(jlresult.getText() + "2");
+					number = Double.parseDouble(jlresult.getText());	
+				}	
+			}
+			
+			//Press button 3
+			else if(ev.getSource() == jbtthree){
+				if (Double.parseDouble(jlresult.getText()) == 0 && decimal_add == false){
+					jlresult.setText("3");
+					number = Double.parseDouble(jlresult.getText());	
+				}
+				else{
+					jlresult.setText(jlresult.getText() + "3");
+					number = Double.parseDouble(jlresult.getText());	
+				}	
+			}
+			
+			//Press button 4
+			else if(ev.getSource() == jbtfour){
+				if (Double.parseDouble(jlresult.getText()) == 0 && decimal_add == false){
+					jlresult.setText("4");
+					number = Double.parseDouble(jlresult.getText());	
+				}
+				else{
+					jlresult.setText(jlresult.getText() + "4");
+					number = Double.parseDouble(jlresult.getText());	
+				}	
+			}
+			
+			//Press button 5
+			else if(ev.getSource() == jbtfive){
+				if (Double.parseDouble(jlresult.getText()) == 0 && decimal_add == false){
+					jlresult.setText("5");
+					number = Double.parseDouble(jlresult.getText());	
+				}
+				else{
+					jlresult.setText(jlresult.getText() + "5");
+					number = Double.parseDouble(jlresult.getText());	
+				}	
+			}
+			
+			//Press button 6
+			else if(ev.getSource() == jbtsix){
+				if (Double.parseDouble(jlresult.getText()) == 0 && decimal_add == false){
+					jlresult.setText("6");
+					number = Double.parseDouble(jlresult.getText());	
+				}
+				else{
+					jlresult.setText(jlresult.getText() + "6");
+					number = Double.parseDouble(jlresult.getText());	
+				}	
+			
+			}
+			
+			//Press button 7
+			else if(ev.getSource() == jbtseven){
+				if (Double.parseDouble(jlresult.getText()) == 0 && decimal_add == false){
+					jlresult.setText("7");
+					number = Double.parseDouble(jlresult.getText());	
+				}
+				else{
+					jlresult.setText(jlresult.getText() + "7");
+					number = Double.parseDouble(jlresult.getText());	
+				}	
+			
+			}
+			
+			//Press button 8
+			else if(ev.getSource() == jbteight){
+				if (Double.parseDouble(jlresult.getText()) == 0 && decimal_add == false){
+					jlresult.setText("8");
+					number = Double.parseDouble(jlresult.getText());	
+				}
+				else{
+					jlresult.setText(jlresult.getText() + "8");
+					number = Double.parseDouble(jlresult.getText());	
+				}	
+
+			}
+		
+			//Press button 9
+			else if(ev.getSource() == jbtnine){
+				if (Double.parseDouble(jlresult.getText()) == 0 && decimal_add == false){
+					jlresult.setText("9");
+					number = Double.parseDouble(jlresult.getText());	
+				}
+				else{
+					jlresult.setText(jlresult.getText() + "9");
+					number = Double.parseDouble(jlresult.getText());	
+				}	
+			
+			}
+			
+			//Press button 0
+			else if(ev.getSource() == jbtzero){
+				//Determine the number is decimal or not , is zero or not
+				if (Double.parseDouble(jlresult.getText()) == 0 && decimal_add == false){
+					//The origin number is 0 without . ,just print the number
+					number = Double.parseDouble(jlresult.getText());	
+				}
+				else{
+					//Add 0 after the origin number on the textfield
+					jlresult.setText(jlresult.getText() + "0");
+					//Set the number and print on the textfield
+					number = Double.parseDouble(jlresult.getText());	
+				}	
+			}
+			
+			//Press button +
+			else if(ev.getSource() == jbtplus){
+				
+				//Get the number
+				number = Double.parseDouble(jlresult.getText());
+			
+				//Enable to continuous compute if press +-*/ before
+				if(staticplus != 0){
+					number = calculate(number_first,number,staticplus);
+				}
+				
+				//Store the number before press button +
+				number_first = number;
+				//Set the static +
+				staticplus = 1;
+				//Reset the Textfield
+				jlresult.setText("0");
+				decimal_add = false;
+				
+			}		
+			// -*/ button as so on
+			
+			
+			
+			//Press button -
+			else if(ev.getSource() == jbtminus){
+				number = Double.parseDouble(jlresult.getText());
+				
+				if(staticplus != 0){
+					number = calculate(number_first,number,staticplus);
+				}
+				
+				number_first = number;
+				staticplus = 2;
+				jlresult.setText("0");
+				decimal_add = false;
+			}
+			
+			//Press button *
+			else if(ev.getSource() == jbttime){
+
+				number = Double.parseDouble(jlresult.getText());
+				
+				if(staticplus != 0){
+					number = calculate(number_first,number,staticplus);
+				}
+				
+				number_first = number;
+				staticplus = 3;
+				jlresult.setText("0");
+				decimal_add = false;
+			}
+			
+			//Press button /
+			else if(ev.getSource() == jbtdivide){
+		
+				number = Double.parseDouble(jlresult.getText());
+				
+				if(staticplus != 0){
+					number = calculate(number_first,number,staticplus);
+				}
+				
+				number_first = number;
+				staticplus = 4;
+				jlresult.setText("0");
+				decimal_add = false;
+
+			}
+			
+			//Press button sin
+			else if(ev.getSource() == jbtsin){
+				number = Double.parseDouble(jlresult.getText());
+				result = Math.sin(number);
+				
+				if( (int)(result) < result){
+					decimal_add = true;
+					String Value = new String(""+result);
+					jlresult.setText(Value);
+				}
+				
+				else if ((int)(result) == result){
+					decimal_add = false;
+					String Value = new String(""+(int)(result));
+					jlresult.setText(Value);
+				}
+				
+			}
+			
+			//Press button cos
+			else if(ev.getSource() == jbtcos){
+				number = Double.parseDouble(jlresult.getText());
+				result = Math.cos(number);
+				
+				if( (int)(result) < result){
+					decimal_add = true;
+					String Value = new String(""+result);
+					jlresult.setText(Value);
+				}
+				
+				else if ((int)(result) == result){
+					decimal_add = false;
+					String Value = new String(""+(int)(result));
+					jlresult.setText(Value);
+				}
+				
+			}
+			
+			//Press button tan
+			else if(ev.getSource() == jbttan){
+			
+				number = Double.parseDouble(jlresult.getText());
+				result = Math.tan(number);
+				
+				if( (int)(result) < result){
+					decimal_add = true;
+					String Value = new String(""+result);
+					jlresult.setText(Value);
+				}
+				
+				else if ((int)(result) == result){
+					decimal_add = false;
+					String Value = new String(""+(int)(result));
+					jlresult.setText(Value);
+				}
+				
+			}
+			
+			//Press button .
+			else if(ev.getSource() == jbtdecimal){
+				
+				if(decimal_add == false){
+					number = Double.parseDouble(jlresult.getText());
+					jlresult.setText(jlresult.getText() + ".");
+					decimal_add = true;
+				}
+			}
+			
+			//Press button root
+			else if(ev.getSource() == jbtroot){
+				number = Double.parseDouble(jlresult.getText());
+				result = Math.pow(number , 0.5);
+				
+				if( (int)(result) < result){
+					decimal_add = true;
+					String Value = new String(""+result);
+					jlresult.setText(Value);
+				}
+				
+				else if ((int)(result) == result){
+					decimal_add = false;
+					String Value = new String(""+(int)(result));
+					jlresult.setText(Value);
+				}
+				
+			
+			}
+			
+			//Press button square
+			else if(ev.getSource() == jbtsquare){
+				number = Double.parseDouble(jlresult.getText());
+				result = Math.pow(number , 2);
+				
+				if( (int)(result) < result){
+					decimal_add = true;
+					String Value = new String(""+result);
+					jlresult.setText(Value);
+				}
+				
+				else if ((int)(result) == result){
+					decimal_add = false;
+					String Value = new String(""+(int)(result));
+					jlresult.setText(Value);
+				}
+				
+			}	
+			
+			//Press button c to clear
+			else if(ev.getSource() == jbtdelete){
+				number = 0;
+				number_first = 0;
+				number_second = 0;
+				result = 0; 
+				staticplus = 0;
+				jlresult.setText("0");
+				decimal_add = false;
+			}
+			
+			//Press button = to compute and print result
+			else if(ev.getSource() == jbtcalculate){
+				number = Double.parseDouble(jlresult.getText());
+				number_second = number;
+			
+				result = calculate(number_first,number_second,staticplus);
+				
+				if( (int)(result) < result){
+					decimal_add = true;
+					String Value = new String(""+result);
+					jlresult.setText(Value);
+				}
+				
+				else if ((int)(result) == result){
+					decimal_add = false;
+					String Value = new String(""+(int)(result));
+					jlresult.setText(Value);
+				}		
+				staticplus = 0;
+				number = 0;
+				number_first = 0;
+				number_second = 0;
+		   }//else if calculate end 
+		
+		} //ButtonListener end
+		
+	}//constructor end
+
+}//main class end
+
